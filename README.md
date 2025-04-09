@@ -20,5 +20,7 @@ Unifi is a console-based banking application inspired by banks in Nigeria, built
 - Transfer: Send money to another account account (simulated account)
 - Pay bills: Pay for services like electricity (simulated)
 - Buy Airtime: Purchase mobile airtime for an 11-digit phone number.
+- Deposit money: Input amount into account.
+- Withdraw: Take money from account.
 
 Data Persistence: User data (username, password, account details) is stored in users.json file.

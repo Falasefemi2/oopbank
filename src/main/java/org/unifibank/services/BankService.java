@@ -71,6 +71,30 @@ public class BankService {
         }
     }
 
+    public void deposit(User user, double amount) {
+        if (amount <= 0) {
+            System.out.println("Amount must be positive!");
+            return;
+        }
+        user.getAccount().setBalance(user.getAccount().getBalance().add(BigDecimal.valueOf(amount)));
+        saveUserToFile();
+        System.out.println("Deposit successful! New balance: " + user.getAccount().getBalance());
+    }
+
+    public void withdraw(User user, double amount) {
+        if (amount <= 0) {
+            System.out.println("Amount must be positive!");
+            return;
+        }
+        if (user.getAccount().getBalance().compareTo(BigDecimal.valueOf(amount)) >= 0) {
+            user.getAccount().setBalance(user.getAccount().getBalance().subtract(BigDecimal.valueOf(amount)));
+            saveUserToFile();
+            System.out.println("Withdrawal successful! New balance: " + user.getAccount().getBalance());
+        } else {
+            System.out.println("Insufficient balance!");
+        }
+    }
+
     public void transfer(User user, String billType, double amount) {
         if (amount <= 0) {
             System.out.println("Amount must be positive!");

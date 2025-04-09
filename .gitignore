@@ -1,0 +1,65 @@
+# Ignore user data files
+users.json
+
+# Ignore build directories
+target/
+
+# Ignore IDE-specific files
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore Maven target directory
+*.class
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Ignore other temporary files
+*.bak
+*.tmp
+*.swp
+*.swo
+*.old
+*.orig
+*.rej
+*.sublime-workspace
+*.sublime-project
+
+# Ignore logs
+*.log
+
+# Ignore compiled Java classes
+*.class
+
+# Ignore package files
+*.jar
+*.war
+*.ear
+
+# Ignore Maven specific files
+mvnw
+mvnw.cmd
+.mvn/
+
+# Ignore IntelliJ IDEA specific files
+.idea/
+*.iml
+*.iws
+
+# Ignore Eclipse specific files
+*.classpath
+*.project
+*.settings/
+
+# Ignore NetBeans specific files
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml 

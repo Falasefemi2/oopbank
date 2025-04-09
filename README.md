@@ -10,8 +10,8 @@ Unifi is a console-based banking application inspired by banks in Nigeria, built
 
 - User Authentication:
 
-  - Sign-up with a uniques username and password, generating random 10-digit account number.
-    -Log in with existing credentials to access account details.
+-Sign-up with a uniques username and password, generating random 10-digit account number.
+-Log in with existing credentials to access account details.
 
 - Account Management:
 - View account number and balance after login

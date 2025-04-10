@@ -19,9 +19,18 @@ import org.unifibank.model.User;
 public class BankService {
     private Map<String, User> users = new HashMap<>();
     private static final String DATA_FILE = "users.json";
+    private boolean isTestMode = false;
 
     public BankService() {
         loadUsersFromFile();
+    }
+
+    // New constructor for test mode
+    public BankService(boolean isTestMode) {
+        this.isTestMode = isTestMode;
+        if (!isTestMode) {
+            loadUsersFromFile();
+        }
     }
 
     public User signUp(String username, String password) {
@@ -142,6 +151,8 @@ public class BankService {
     }
 
     public void saveUserToFile() {
+        if (isTestMode)
+            return;
         JSONArray jsonArray = new JSONArray();
         for (User user : users.values()) {
             JSONObject userJson = new JSONObject();

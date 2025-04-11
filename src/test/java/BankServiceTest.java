@@ -81,7 +81,7 @@ public class BankServiceTest {
         BankService bankService = new BankService(true);
         user = bankService.signUp("david", "pass123");
         bankService.deposit(user, 2000);
-        bankService.buyAirtime(user, "08012345678", 1000);
+        bankService.buyAirtime(user, "70133299535", 1000);
         assertEquals(0, user.getAccount().getBalance().compareTo(BigDecimal.valueOf(1000)));
     }
 }

@@ -14,6 +14,7 @@ import java.util.Random;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.unifibank.model.Account;
+import org.unifibank.model.TransactionType;
 import org.unifibank.model.User;
 
 public class BankService {
@@ -80,6 +81,37 @@ public class BankService {
         }
     }
 
+    public void handleTransaction(User user, TransactionType type, double amount, String extraInfo) {
+        if (amount <= 0) {
+            System.out.println("Amount must be positive");
+            return;
+        }
+        // Special validation for number
+        if (type == TransactionType.BUY_AIRTIME && !extraInfo.matches("\\d{11}")) {
+            System.out.println("Invalid phone number. Must be 11 digits");
+            return;
+        }
+        // Check if the balance is enough
+        if (user.getAccount().getBalance().compareTo(BigDecimal.valueOf(amount)) >= 0) {
+            // Deduct the money
+            user.getAccount().setBalance(user.getAccount().getBalance().subtract(BigDecimal.valueOf(amount)));
+
+            switch (type) {
+                case WITHDRAW ->
+                    System.out.println("Withdraw successful! New Balance: " + user.getAccount().getBalance());
+
+                case TRANSFER ->
+                    System.out.println("Transfer successful! New Balance: " + user.getAccount().getBalance());
+                case PAY_BILL ->
+                    System.out.println("Paid " + amount + " for " + extraInfo);
+                case BUY_AIRTIME ->
+                    System.out.println("Bought airtime of " + amount + " for " + extraInfo);
+            }
+        } else {
+            System.out.println("Insufficient funds");
+        }
+    }
+
     public void deposit(User user, double amount) {
         if (amount <= 0) {
             System.out.println("Amount must be positive!");
@@ -88,66 +120,27 @@ public class BankService {
         user.getAccount().setBalance(user.getAccount().getBalance().add(BigDecimal.valueOf(amount)));
         saveUserToFile();
         System.out.println("Deposit successful! New balance: " + user.getAccount().getBalance());
+        saveUserToFile();
     }
 
     public void withdraw(User user, double amount) {
-        if (amount <= 0) {
-            System.out.println("Amount must be positive!");
-            return;
-        }
-        if (user.getAccount().getBalance().compareTo(BigDecimal.valueOf(amount)) >= 0) {
-            user.getAccount().setBalance(user.getAccount().getBalance().subtract(BigDecimal.valueOf(amount)));
-            saveUserToFile();
-            System.out.println("Withdrawal successful! New balance: " + user.getAccount().getBalance());
-        } else {
-            System.out.println("Insufficient balance!");
-        }
+        handleTransaction(user, TransactionType.WITHDRAW, amount, "");
+        saveUserToFile();
     }
 
     public void transfer(User user, String billType, double amount) {
-        if (amount <= 0) {
-            System.out.println("Amount must be positive!");
-            return;
-        }
-        if (user.getAccount().getBalance().compareTo(BigDecimal.valueOf(amount)) >= 0) {
-            user.getAccount().setBalance(user.getAccount().getBalance().subtract(BigDecimal.valueOf(amount)));
-            saveUserToFile();
-            System.out.println("Transfer successful! New balance: " + user.getAccount().getBalance());
-        } else {
-            System.out.println("Insufficient balance!");
-        }
+        handleTransaction(user, TransactionType.TRANSFER, amount, billType);
+        saveUserToFile();
     }
 
     public void payBill(User user, String billType, double amount) {
-        if (amount <= 0) {
-            System.out.println("Amount must be positive!");
-            return;
-        }
-        if (user.getAccount().getBalance().compareTo(BigDecimal.valueOf(amount)) >= 0) {
-            user.getAccount().setBalance(user.getAccount().getBalance().subtract(BigDecimal.valueOf(amount)));
-            saveUserToFile();
-            System.out.println("Paid " + amount + " for " + billType);
-        } else {
-            System.out.println("Insufficient balance!");
-        }
+        handleTransaction(user, TransactionType.PAY_BILL, amount, billType);
+        saveUserToFile();
     }
 
     public void buyAirtime(User user, String phoneNumber, double amount) {
-        if (amount <= 0) {
-            System.out.println("Amount must be positive!");
-            return;
-        }
-        if (!phoneNumber.matches("\\d{11}")) { // Nigerian phone number validation
-            System.out.println("Invalid phone number! Must be 11 digits.");
-            return;
-        }
-        if (user.getAccount().getBalance().compareTo(BigDecimal.valueOf(amount)) >= 0) {
-            user.getAccount().setBalance(user.getAccount().getBalance().subtract(BigDecimal.valueOf(amount)));
-            saveUserToFile();
-            System.out.println("Bought " + amount + " airtime for " + phoneNumber);
-        } else {
-            System.out.println("Insufficient balance!");
-        }
+        handleTransaction(user, TransactionType.BUY_AIRTIME, amount, phoneNumber);
+        saveUserToFile();
     }
 
     public void saveUserToFile() {
